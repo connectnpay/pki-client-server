@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class RSAUtil {
+
     /**
      * Signs data with privateKey
      *
@@ -47,8 +48,11 @@ public class RSAUtil {
         Signature publicSignature = Signature.getInstance("SHA256withRSA");
         publicSignature.initVerify(getPublicKey(publicKey));
         publicSignature.update(data.getBytes());
-
-        return publicSignature.verify(signature);
+        boolean verified = publicSignature.verify(signature);
+        if (!verified) {
+            throw new RuntimeException("Invalid Key.");
+        }
+        return verified;
     }
 
     /**
