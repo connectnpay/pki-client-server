@@ -67,7 +67,6 @@ public class PKISecurityTool extends Base64Util {
 
         // Decrypting data
         return AESEncryptionUtil.decrypt(requestWrapper.getData(), secretKey);
-        }
     }
 
 }
