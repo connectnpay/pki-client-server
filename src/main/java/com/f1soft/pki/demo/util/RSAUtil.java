@@ -65,7 +65,6 @@ public class RSAUtil {
         System.out.println("hash: " + Base64.getEncoder().encodeToString(outputDigest));
 
         String signature = Base64.getEncoder().encodeToString(signed);
-        System.out.println("signature: " + signature);
 
         return signature;
     }
