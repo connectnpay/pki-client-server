@@ -12,6 +12,7 @@ import org.apache.log4j.BasicConfigurator;
  */
 @Slf4j
 public class MainForJSTesting {
+
     private final static String privateKey = "MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCP4pGYmFM7sW3S0el1O7/0mBggdvzYdcr79kBW/Qxude4xM3/zH2BsMGmt8p5+k87ynGT96W8R3vcWIL0VgoMcKXgEZiDee/Avand2x9u3IeH4yXqzOvs1uiPugTa0SS5tOWReKubMaIssRTF5mzzON1j8aUWKYOEPQdnCJ0NV+HbCuWRJbZbQ0etCWZdmlpqTdb7PqZM9b67M2RpyxUJzc6VmJdPRo7WKuAv+CwyzATtfTBaW4ARTe8yUq1GqrSRjDVq8eYqa/etk/XwTE6kO57nXFlARbd9J3SP5J7LBWLVW5Bdz4qlHe8418fKib4xnS7lxbRb5xQhhZ2z2Ob4TAgMBAAECggEAZQQhSeuvi9oei4M6D0daleNuFOTU0Tepwcl6FFhmMOr0xnAspUjjDjHTD/+lDKLDCQuJz8XiZ76M5Gkptv9BAzWOADCfZPPIhdGOe8MG24SbPGpfjZOcKHU9osXu3RX/1UkU0RP3o4zGINeXS5QUVYcAH33dB7DKcUa/FhMwsBrJ3i0aIwqwPwkXJDsvlkoMybNmQ86eqgc6hEq5UIDNo8hnYCCUXCIDnCbWxBuuetEGwfyZNniiZhfop3YV7hPijXeDB8ZnIXI/KjteyYGgCyIdynFwhJv2NmoTid+lAezCusud62i8r8Js0caG3bvZqF6oB8SkpnIazDQZttVOIQKBgQDEewAp4lrT9gtvrLFbqvx/3BxU+GQko0Cf5wZpLbGuWbuE4oOiIAZkUTvc5kwxcPSKgEopImJmgS9YmhlRrbMHiTikCckA9llV0M0xLMAp7gFWy7uUQBbrciFTjOc03lNZCnMIJYcjOyVFMOSdn8qeYXXtvkJJ0FGISIaoJyKtgwKBgQC7eM7uXaHhIRWT9rkQqmrJ5Bk79FInblXebBm7/ujejC3lnKeVMzCW2DQe9p2b5jWQyihcnZSyOziAmeegQUqbhZ8CHWnmKnU1v9cFGIsjUfYfOoSp0A6q4DSyBxJVm03BEv4ZsCrAA/xrV0GvRwJiW1yIvHMXNhDcyMUMyhDYMQKBgF+trhS3X5ecV1FYfT2wdCknXLycANg+j3fOnraVQ9Mtaz14uLU4dyRe0pHtq+jfopXXh0WkstpLymyRDgdSWL4wul5XTYSkcjhx55osup8wgYJsz7mPxBl/iG8RTH3YTiosBnxPGhGz+aBKAOopKBgcSbsuTUV4pluBReGYvTBVAoGAUDuT1FAeR8txALJG4esNaPpGEnKt9lIyTc7V9K9T2msD+ZDh5+jQkr5VECtbqK0Nn7nlLD4EtYLC28cCaoOG+qhlNPKBsA/bufUwgO3QHn2laBgTTtnMbTUnWEnOfvTIgikutq++nA8YqJffdLRfQNj48Uw1tWleLh9+tcqFCwECgYBhh57Q0SFKZqdYyIHuy4Pv7W2vkk0SFChq+sxZkOsAhvZWc10TxFHxoQNo+TlFC3YFwiMOBeB1oI7NZXI8zmT6ZPRQPrlq7SOJke/Uab4NE66vChyonVX1CBMru/da1zJqwPJg0SWVQjauLn3ae01ACbKmNYwW+CC7YKrf7q5Vfw==";
     private final static String publicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAj+KRmJhTO7Ft0tHpdTu/9JgYIHb82HXK+/ZAVv0MbnXuMTN/8x9gbDBprfKefpPO8pxk/elvEd73FiC9FYKDHCl4BGYg3nvwL2p3dsfbtyHh+Ml6szr7Nboj7oE2tEkubTlkXirmzGiLLEUxeZs8zjdY/GlFimDhD0HZwidDVfh2wrlkSW2W0NHrQlmXZpaak3W+z6mTPW+uzNkacsVCc3OlZiXT0aO1irgL/gsMswE7X0wWluAEU3vMlKtRqq0kYw1avHmKmv3rZP18ExOpDue51xZQEW3fSd0j+SeywVi1VuQXc+KpR3vONfHyom+MZ0u5cW0W+cUIYWds9jm+EwIDAQAB";
 
@@ -19,14 +20,41 @@ public class MainForJSTesting {
         BasicConfigurator.configure();
 //        testRSAEncDec();
 //        testSignVerify();
+//        testSignVerify2();
+//        testSignVerify3();
+        testSignVerify4();
 //        testAESEncDec();
 //        callEncryptSigner();
-        callDecryptVerifier();
+//        callDecryptVerifier();
     }
 
     public static void testSignVerify() throws Exception {
         String signature = RSAUtil.generateSignature("Manjit".getBytes(), privateKey);
-        boolean verified = RSAUtil.verifySignature("Manjit", publicKey, Base64Util.decode("LfhwAWe2vSi4ucKaKDPPAhyjz/TLBqz2oQAvr7OcqUiFDWqeach1hRf/NZaxR81gxE7TiovG28rIuqIK+p5SX3IyqaV2bWFiz7Bg4GcsQbjtUAu5Dz8pGshxVmlbd4TbBgjQWJpTRZ/GvKDkKXUIi4Ii5tQ8tRukM0RjBngvpZUhCQcWHH3uLULnh8VALs0IvK7FewaAse0Lms6gCWYcifVoFciGUJEXAdXq0W9Da53QHRe9csBi/CBmSruk75U5bK8V+VgimNvKmu7BBBUocroV7xWz/Enoczk8Ys0SpwQhvNB6/hw5xsJ16QzrevOauD//AIaqDMhcGX5JrhwG6A=="));
+        boolean verified = RSAUtil.verifySignature("Manjit", publicKey, Base64Util.decode(signature));
+
+        System.out.println(signature);
+        System.out.println(verified);
+    }
+
+    public static void testSignVerify2() throws Exception {
+        String signature = RSAUtil.generateSignature("Manjit".getBytes(), privateKey);
+        boolean verified = RSAUtil.verifySignature2("Manjit", publicKey, Base64Util.decode(signature));
+
+        System.out.println(signature);
+        System.out.println(verified);
+    }
+
+    public static void testSignVerify3() throws Exception {
+        String signature = RSAUtil.generateSignature2("Manjit".getBytes(), privateKey);
+        boolean verified = RSAUtil.verifySignature("Manjit", publicKey, Base64Util.decode(signature));
+
+        System.out.println(signature);
+        System.out.println(verified);
+    }
+
+    public static void testSignVerify4() throws Exception {
+        String signature = RSAUtil.generateSignature2("Manjit".getBytes(), privateKey);
+        boolean verified = RSAUtil.verifySignature2("Manjit", publicKey, Base64Util.decode(signature));
 
         System.out.println(signature);
         System.out.println(verified);

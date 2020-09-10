@@ -1,6 +1,7 @@
 package com.f1soft.pki.demo.util;
 
 import java.security.KeyFactory;
+import java.security.MessageDigest;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
@@ -10,6 +11,10 @@ import java.util.Base64;
 import javax.crypto.Cipher;
 
 import lombok.extern.slf4j.Slf4j;
+import org.bouncycastle.asn1.DERNull;
+import org.bouncycastle.asn1.nist.NISTObjectIdentifiers;
+import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
+import org.bouncycastle.asn1.x509.DigestInfo;
 
 /**
  * @author Manjit Shakya <manjit.shakya@f1soft.com>
@@ -36,6 +41,36 @@ public class RSAUtil {
     }
 
     /**
+     * Signs data with privateKey
+     *
+     * @param data
+     * @param privateKey
+     * @return
+     * @throws Exception
+     */
+    public static String generateSignature2(byte[] data, String privateKey) throws Exception {
+        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+        messageDigest.update(data);
+        byte[] outputDigest = messageDigest.digest();
+
+        AlgorithmIdentifier sha256Aid = new AlgorithmIdentifier(NISTObjectIdentifiers.id_sha256, DERNull.INSTANCE);
+        DigestInfo di = new DigestInfo(sha256Aid, outputDigest);
+        //sign SHA256 with RSA
+        Signature rsaSignature = Signature.getInstance("NONEwithRSA");
+        rsaSignature.initSign(getPrivateKey(privateKey));
+        byte[] encodedDigestInfo = di.toASN1Primitive().getEncoded();
+        rsaSignature.update(encodedDigestInfo);
+        byte[] signed = rsaSignature.sign();
+
+        System.out.println("hash: " + Base64.getEncoder().encodeToString(outputDigest));
+
+        String signature = Base64.getEncoder().encodeToString(signed);
+        System.out.println("signature: " + signature);
+
+        return signature;
+    }
+
+    /**
      * Verifies using publicKey
      *
      * @param data
@@ -49,6 +84,40 @@ public class RSAUtil {
         publicSignature.initVerify(getPublicKey(publicKey));
         publicSignature.update(data.getBytes());
         boolean verified = publicSignature.verify(signature);
+        if (!verified) {
+            throw new RuntimeException("Invalid Key.");
+        }
+        return verified;
+    }
+
+    /**
+     * Verifies using publicKey
+     *
+     * @param data
+     * @param publicKey
+     * @param signature
+     * @return
+     * @throws Exception
+     */
+    public static boolean verifySignature2(String data, String publicKey, byte[] signature) throws Exception {
+
+        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+        messageDigest.update(data.getBytes());
+        byte[] outputDigest = messageDigest.digest();
+
+        AlgorithmIdentifier sha256Aid = new AlgorithmIdentifier(NISTObjectIdentifiers.id_sha256, DERNull.INSTANCE);
+        DigestInfo digestInfo = new DigestInfo(sha256Aid, outputDigest);
+
+        //sign SHA256 with RSA
+        Signature rsaSignature = Signature.getInstance("NONEwithRSA");
+        byte[] encodedDigestInfo = digestInfo.toASN1Primitive().getEncoded();
+
+        rsaSignature.initVerify(getPublicKey(publicKey));
+        rsaSignature.update(encodedDigestInfo);
+
+        System.out.println("hash: " + Base64Util.encode(outputDigest));
+
+        boolean verified = rsaSignature.verify(signature);
         if (!verified) {
             throw new RuntimeException("Invalid Key.");
         }
